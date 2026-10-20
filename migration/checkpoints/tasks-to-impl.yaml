@@ -1,0 +1,217 @@
+metadata:
+  generated: 2026-09-19
+  last_updated: 2026-09-20
+  source_tasks: migration/plan.md
+  evidence_report: migration/batch-report.yaml
+summary:
+  total_tasks: 21
+  completed_tasks: 7
+  in_progress_tasks: 13
+  pending_tasks: 1
+  completion_percentage: 33.33
+  notes: Task acceptance count only; not percentage of code implemented. T017 is
+    optional.
+tasks:
+  - task_id: T001
+    status: completed
+    implementation:
+      files_changed:
+        - file: java-backend/pom.xml
+          description: Java service foundation
+    verification:
+      build_passed: true
+      notes: SecurityBoundaryTest plus live HTTP health and integration validation
+    upstream_trace:
+      plan_item: "1"
+      requirements:
+        - REQ-001
+  - task_id: T003
+    status: completed
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/AccountService.java
+          description: Sessions roles and BCrypt
+    verification:
+      build_passed: true
+      notes: AuthIntegrationTest and browser authentication
+    upstream_trace:
+      plan_item: "1"
+      requirements:
+        - REQ-003
+  - task_id: T006
+    status: completed
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/DocumentParser.java
+          description: Document extraction
+    verification:
+      build_passed: true
+      notes: DocumentParserTest generated TXT PDF DOCX and scanned-document rejection
+    upstream_trace:
+      plan_item: "2"
+      requirements:
+        - REQ-006
+  - task_id: T013
+    status: completed
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/AgentRunner.java
+          description: Real tool selection and owner-bound callbacks
+    verification:
+      build_passed: true
+      notes: Real-model search/read/save trace and forged citation rejection
+    upstream_trace:
+      plan_item: "3"
+      requirements:
+        - REQ-013
+  - task_id: T002
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-002
+    notes: V1-V5 pass; read-only SQLite audit reports zero records; JPA deviation
+      remains
+  - task_id: T004
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-004
+    notes: Resume workflow passes; B05 adds model-free upload failure matrix
+      (empty batch, >5 files, unsupported type, empty file, >50000 chars, forged
+      owner, anonymous); real-AI fault injection and concurrency remain
+  - task_id: T005
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-005
+    notes: Builds and user browser pass; admin browser pending
+  - task_id: T007
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-007
+    notes: Real extraction and correction pass; fault coverage pending
+  - task_id: T008
+    status: completed
+    upstream_trace:
+      requirements:
+        - REQ-008
+    notes: Verified in B03; see execution-report.md
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/JobService.java
+          description: B03 implementation verified
+    verification:
+      build_passed: true
+      notes: "Final real-service suite: 20 passed, zero skipped"
+  - task_id: T009
+    status: completed
+    upstream_trace:
+      requirements:
+        - REQ-009
+    notes: Verified in B03; see execution-report.md
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/SearchService.java
+          description: B03 implementation verified
+    verification:
+      build_passed: true
+      notes: "Final real-service suite: 20 passed, zero skipped"
+  - task_id: T010
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-010
+    notes: Quote validation passes; semantic evaluation pending
+  - task_id: T011
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-011
+    notes: Multi-candidate and sensitive-attribute evaluation pending
+  - task_id: T012
+    status: completed
+    upstream_trace:
+      requirements:
+        - REQ-012
+    notes: Verified in B03; see execution-report.md
+    implementation:
+      files_changed:
+        - file: java-backend/src/main/java/com/iras/AgentTaskService.java
+          description: B03 implementation verified
+    verification:
+      build_passed: true
+      notes: "Final real-service suite: 20 passed, zero skipped"
+  - task_id: T014
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-014
+    notes: B05 adds deterministic unit tests for round/tool budget exhaustion and
+      unauthorized-tool rejection; timeout exhaustion and injection matrix pending
+  - task_id: T015
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-015
+    notes: Approval idempotency and stale pass; concurrency cases pending
+  - task_id: T016
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-016
+    notes: Expired lease recovery and exhausted SSE pass; actual in-flight process
+      kill and multi-worker drill pending
+  - task_id: T017
+    status: pending
+    optional: true
+    upstream_trace:
+      requirements:
+        - REQ-017
+    notes: No external actions implemented
+  - task_id: T018
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-018
+    notes: Single-instance auth rate limit and Agent draft preconditions tested;
+      33 Java dependencies rescanned clean after patches, full security audit pending
+  - task_id: T019
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-019
+    notes: Persistent traces implemented; broader metrics pending
+  - task_id: T020
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-020
+    notes: 22 Java real-service tests pass without skips; browser startup only
+      this batch, full acceptance and semantic labels pending
+  - task_id: T021
+    status: in-progress
+    upstream_trace:
+      requirements:
+        - REQ-021
+    notes: CI configured; isolated nonempty restore and tampering/missing rejection
+      pass; remote CI, nonempty quiesced creation and production restore pending
+pending_tasks:
+  - task_id: T017
+    description: Optional external integrations disabled
+    blocked_by: []
+    priority: optional
+untracked_changes: []
+traceability_chain:
+  - source: MIGRATION_BASELINE.md
+    plan: migration/plan.md
+    mapping: migration/batch-report.yaml
+    status: partial
+validation:
+  passed: false
+  errors: []
+  warnings:
+    - Partial implementation checkpoint; not final sign-off
+    - No exhaustive branch coverage measurement
+  blocking_issues:
+    - Thirteen required tasks still have acceptance gaps

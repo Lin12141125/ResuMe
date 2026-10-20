@@ -1,0 +1,225 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build user frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-ending-project",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify backend",
+			"type": "shell",
+			"command": "e:/HKU_Sem1/NLP/Project/code/.venv/Scripts/python.exe",
+			"args": [
+				"mysite/manage.py",
+				"test",
+				"IRAS",
+				"--verbosity",
+				"1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build admin frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-admin",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run local backend",
+			"type": "shell",
+			"command": "set \"RESUME_PARSER=local\" && .venv\\Scripts\\python.exe mysite\\manage.py runserver 127.0.0.1:8000 --noreload",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build user frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-ending-project",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify backend",
+			"type": "shell",
+			"command": "e:/HKU_Sem1/NLP/Project/code/.venv/Scripts/python.exe",
+			"args": [
+				"mysite/manage.py",
+				"test",
+				"IRAS",
+				"--verbosity",
+				"1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify backend",
+			"type": "shell",
+			"command": "e:/HKU_Sem1/NLP/Project/code/.venv/Scripts/python.exe",
+			"args": [
+				"mysite/manage.py",
+				"test",
+				"IRAS",
+				"--verbosity",
+				"1"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify safe test entry",
+			"type": "shell",
+			"command": "e:/HKU_Sem1/NLP/Project/code/.venv/Scripts/python.exe",
+			"args": [
+				"mysite/test_fixes.py"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build user frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-ending-project",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build admin frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-admin",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run local backend",
+			"type": "shell",
+			"command": "set \"RESUME_PARSER=local\" && .venv\\Scripts\\python.exe mysite\\manage.py runserver 127.0.0.1:8000 --noreload",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Java backend",
+			"type": "shell",
+			"command": "set \"JAVA_HOME=D:\\DownLoad\\Java\\jdk21\" && C:\\Users\\25461\\.maven\\maven-3.9.16\\bin\\mvn.cmd",
+			"args": [
+				"-f",
+				"java-backend/pom.xml",
+				"-Dtest=DocumentParserTest,DatabaseMigrationTest,AuthIntegrationTest",
+				"test",
+				"-q"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Java real services",
+			"type": "shell",
+			"command": "set \"JAVA_HOME=D:\\DownLoad\\Java\\jdk21\" && C:\\Users\\25461\\.maven\\maven-3.9.16\\bin\\mvn.cmd",
+			"args": [
+				"-f",
+				"java-backend/pom.xml",
+				"-Dtest=AuthIntegrationTest",
+				"-Diras.test.ai=true",
+				"test",
+				"-q"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify complete Java real suite",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"java-backend/dev.mjs",
+				"test-real"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Java Agent backend",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"java-backend/dev.mjs",
+				"run"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Java user frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-ending-project",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"127.0.0.1",
+				"--port",
+				"5173",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Java admin frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"vue-admin",
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"127.0.0.1",
+				"--port",
+				"5174",
+				"--strictPort"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

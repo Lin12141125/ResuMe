@@ -1,0 +1,341 @@
+batch_id: B04-security-and-recovery
+status: partial
+completed_tasks:
+  - T001
+  - T003
+  - T006
+  - T008
+  - T009
+  - T012
+  - T013
+blocked_tasks: []
+files_changed:
+  T001:
+    - file: java-backend/pom.xml
+      change_type: modified
+      description: Java21 Boot3.5.16 AI1.1.8 with targeted security overrides
+    - file: java-backend/src/main/java/com/iras/ApiErrors.java
+      change_type: created
+      description: Business error responses
+  T002:
+    - file: java-backend/src/main/resources/db/migration
+      change_type: created
+      description: V1-V4 PostgreSQL schema
+    - file: java-backend/tools/legacy-audit.mjs
+      change_type: created
+      description: Read-only aggregate legacy audit; actual SQLite empty
+    - file: java-backend/src/main/resources/db/migration/V5__evidence_versions.sql
+      change_type: created
+      description: Immutable evidence versions and source attribution
+  T003:
+    - file: java-backend/src/main/java/com/iras/AccountService.java
+      change_type: created
+      description: BCrypt accounts and ownership
+    - file: java-backend/src/main/java/com/iras/AuthController.java
+      change_type: created
+      description: Cookie session authentication
+    - file: java-backend/src/main/java/com/iras/AdminController.java
+      change_type: created
+      description: Admin-only user management
+    - file: java-backend/src/main/java/com/iras/SecurityConfiguration.java
+      change_type: modified
+      description: CSRF and explicit CORS
+  T004:
+    - file: java-backend/src/main/java/com/iras/ResumeService.java
+      change_type: created
+      description: Upload versions deletion and owner isolation
+    - file: java-backend/src/main/java/com/iras/StatisticsService.java
+      change_type: created
+      description: Legacy statistics with unknown buckets
+    - file: java-backend/src/main/java/com/iras/FileCleanup.java
+      change_type: created
+      description: Durable deletion retry
+  T005:
+    - file: vue-ending-project/src/views/AgentPage.vue
+      change_type: created
+      description: Jobs tasks reports approval and correction
+    - file: vue-ending-project/src/main.js
+      change_type: modified
+      description: Session and CSRF client
+    - file: vue-admin/src/main.js
+      change_type: modified
+      description: Session and CSRF client
+    - file: vue-ending-project/src/utils/dynamic_options.js
+      change_type: modified
+      description: Unknown buckets and correct work-year key
+  T006:
+    - file: java-backend/src/main/java/com/iras/DocumentParser.java
+      change_type: created
+      description: TXT PDF DOCX text and location
+  T007:
+    - file: java-backend/src/main/java/com/iras/AiService.java
+      change_type: created
+      description: Real structured Chat and embedding
+  T008:
+    - file: java-backend/src/main/java/com/iras/JobService.java
+      change_type: created
+      description: JD extraction and confirmation
+  T009:
+    - file: java-backend/src/main/java/com/iras/SearchService.java
+      change_type: created
+      description: Owner-scoped lexical vector search
+  T013:
+    - file: java-backend/src/main/java/com/iras/AgentRunner.java
+      change_type: created
+      description: Bounded tool loop and quote validation
+  T015:
+    - file: java-backend/src/main/java/com/iras/AgentTaskService.java
+      change_type: created
+      description: Queue leases report versions approval
+  T016:
+    - file: java-backend/src/main/java/com/iras/AgentController.java
+      change_type: created
+      description: Tasks and SSE
+  T020:
+    - file: java-backend/src/test/java/com/iras/AuthIntegrationTest.java
+      change_type: created
+      description: Real HTTP database and optional real AI tests
+    - file: java-backend/src/test/java/com/iras/DocumentParserTest.java
+      change_type: created
+      description: Generated documents and date rules
+  T021:
+    - file: java-backend/dev.mjs
+      change_type: created
+      description: Local Node launch and verification entry
+    - file: java-backend/tools/backup.mjs
+      change_type: created
+      description: Quiesced backup and isolated restore verification
+    - file: .github/workflows/java-agent.yml
+      change_type: created
+      description: Real PostgreSQL CI and explicit real AI opt-in
+upstream_artifacts_consumed:
+  all_tasks:
+    - artifact: MIGRATION_BASELINE.md
+      used_for: Acceptance conditions and privacy constraints
+    - artifact: migration/plan.md
+      used_for: Task mapping API design and architecture
+evidence_mapping:
+  T001:
+    - upstream: MIGRATION_BASELINE.md#REQ-001
+      output: java-backend/src/main/java/com/iras/SystemController.java
+      evidence: SecurityBoundaryTest and live health endpoint
+  T003:
+    - upstream: MIGRATION_BASELINE.md#REQ-003
+      output: java-backend/src/main/java/com/iras/AuthController.java
+      evidence: AuthIntegrationTest and browser login/logout
+  T006:
+    - upstream: MIGRATION_BASELINE.md#REQ-006
+      output: java-backend/src/main/java/com/iras/DocumentParser.java
+      evidence: DocumentParserTest
+  T013:
+    - upstream: MIGRATION_BASELINE.md#REQ-013
+      output: java-backend/src/main/java/com/iras/AgentRunner.java
+      evidence: AuthIntegrationTest real search/read/save trace
+source_references:
+  T003:
+    source_files:
+      - file: mysite/IRAS/views.py
+        methods_read:
+          - api
+          - user_register
+          - user_login
+          - admin_login
+    notes: Cookie authentication intentionally replaces legacy tokens; exhaustive
+      branch counts not measured.
+  T004:
+    source_files:
+      - file: mysite/IRAS/views.py
+        methods_read:
+          - resume_upload2interpret
+          - find_user_resumes
+          - single_resume_present
+          - resume_delete
+          - resume_statistic
+    notes: Legacy keys retained; complete frozen behavior coverage is pending.
+  T007:
+    source_files:
+      - file: mysite/IRAS/utils/resumeExtration.py
+        methods_read:
+          - parse_resume
+          - calculate_work_years
+    notes: Fixed extraction fields and interval merging retained; no real personal
+      documents sent.
+traceability:
+  - requirement: REQ-001
+    plan_item: "1"
+    task: T001
+    files:
+      - java-backend/pom.xml
+    status: completed
+  - requirement: REQ-002
+    plan_item: "1"
+    task: T002
+    files:
+      - java-backend/src/main/resources/db/migration
+    status: partial
+  - requirement: REQ-003
+    plan_item: "1"
+    task: T003
+    files:
+      - java-backend/src/main/java/com/iras/AccountService.java
+    status: completed
+  - requirement: REQ-004
+    plan_item: "1"
+    task: T004
+    files:
+      - java-backend/src/main/java/com/iras/ResumeService.java
+    status: partial
+  - requirement: REQ-005
+    plan_item: "1"
+    task: T005
+    files:
+      - vue-ending-project/src/views/AgentPage.vue
+      - vue-admin/src/main.js
+    status: partial
+  - requirement: REQ-006
+    plan_item: "2"
+    task: T006
+    files:
+      - java-backend/src/main/java/com/iras/DocumentParser.java
+    status: completed
+  - requirement: REQ-007
+    plan_item: "2"
+    task: T007
+    files:
+      - java-backend/src/main/java/com/iras/ResumeService.java
+    status: partial
+  - requirement: REQ-008
+    plan_item: "2"
+    task: T008
+    files:
+      - java-backend/src/main/java/com/iras/JobService.java
+    status: completed
+  - requirement: REQ-009
+    plan_item: "2"
+    task: T009
+    files:
+      - java-backend/src/main/java/com/iras/SearchService.java
+    status: completed
+  - requirement: REQ-010
+    plan_item: "2"
+    task: T010
+    files:
+      - java-backend/src/main/java/com/iras/AgentRunner.java
+    status: partial
+  - requirement: REQ-011
+    plan_item: "2"
+    task: T011
+    files:
+      - vue-ending-project/src/views/AgentPage.vue
+    status: partial
+  - requirement: REQ-012
+    plan_item: "3"
+    task: T012
+    files:
+      - java-backend/src/main/java/com/iras/AgentTaskService.java
+    status: completed
+  - requirement: REQ-013
+    plan_item: "3"
+    task: T013
+    files:
+      - java-backend/src/main/java/com/iras/AgentRunner.java
+    status: completed
+  - requirement: REQ-014
+    plan_item: "3"
+    task: T014
+    files:
+      - java-backend/src/main/java/com/iras/AgentRunner.java
+    status: partial
+  - requirement: REQ-015
+    plan_item: "3"
+    task: T015
+    files:
+      - java-backend/src/main/java/com/iras/AgentTaskService.java
+    status: partial
+  - requirement: REQ-016
+    plan_item: "3"
+    task: T016
+    files:
+      - java-backend/src/main/java/com/iras/AgentController.java
+    status: partial
+  - requirement: REQ-017
+    plan_item: optional
+    task: T017
+    files: []
+    status: optional
+  - requirement: REQ-018
+    plan_item: "4"
+    task: T018
+    files:
+      - java-backend/src/test/java/com/iras/AuthIntegrationTest.java
+    status: partial
+  - requirement: REQ-019
+    plan_item: "4"
+    task: T019
+    files:
+      - java-backend/src/main/java/com/iras/AgentRunner.java
+    status: partial
+  - requirement: REQ-020
+    plan_item: "4"
+    task: T020
+    files:
+      - java-backend/src/test/java/com/iras/AuthIntegrationTest.java
+    status: partial
+  - requirement: REQ-021
+    plan_item: "4"
+    task: T021
+    files:
+      - java-backend/dev.mjs
+      - java-backend/compose.yaml
+    status: partial
+protocol_violation: false
+errors: []
+warnings:
+  - severity: HIGH
+    message: Administrator browser acceptance, labeled evaluation, security review
+      and production deployment pending.
+  - severity: HIGH
+    message: JdbcTemplate differs from initial JPA plan; nonempty legacy import
+      needs identity/reset policy and consent.
+  - severity: MEDIUM
+    message: CI configured but not remotely executed; isolated nonempty restore
+      passes, production restore and nonempty quiesced creation pending.
+  - severity: MEDIUM
+    message: One real clarification test initially failed; corrected prompt and
+      final 22-test suite passed. Model semantics are not formally guaranteed.
+test_results:
+  java_real_suite:
+    command: node java-backend/dev.mjs test-real
+    passed: 22
+    failed: 0
+    errors: 0
+    skipped: 0
+    failures: []
+  user_build:
+    command: npm --prefix vue-ending-project run build
+    result: PASS
+  admin_build:
+    command: npm --prefix vue-admin run build
+    result: PASS
+  chart_mapping:
+    passed: 5
+    failed: 0
+    evidence: Direct Node assertions
+  browser:
+    result: PARTIAL
+    scope: Startup and anonymous route only; full B02 interactive evidence is historical
+  legacy_audit:
+    command: node --test java-backend/tools/legacy-audit.test.mjs
+    passed: 1
+    failed: 0
+  backup_restore:
+    result: PASS
+    command: node --test java-backend/tools/backup.test.mjs
+    resume_files: 1
+    scope: Real isolated V1-V5 database; synthetic file success and tampering/missing rejection
+  dependency_scan:
+    coordinates_scanned: 33
+    initial_findings: 49
+    final_findings: 0
+    report: migration/cve-java-b04-rescan.json
+    scope: Selected Java runtime dependencies only; not npm/container/full dependency coverage

@@ -1,0 +1,43 @@
+CREATE TABLE jobs (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    owner_id BIGINT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    title VARCHAR(160) NOT NULL,
+    description TEXT NOT NULL,
+    requirements JSONB NOT NULL,
+    confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+    version INTEGER NOT NULL DEFAULT 1,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE agent_tasks (
+    id UUID PRIMARY KEY,
+    owner_id BIGINT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    job_id BIGINT NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+    job_version INTEGER NOT NULL,
+    request TEXT NOT NULL,
+    state VARCHAR(24) NOT NULL CHECK (state IN ('QUEUED','RUNNING','WAITING','COMPLETED','FAILED','CANCELLED')),
+    clarification TEXT,
+    trace JSONB NOT NULL DEFAULT '[]',
+    error VARCHAR(255),
+    attempts INTEGER NOT NULL DEFAULT 0,
+    lease_until TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX agent_tasks_queue_idx ON agent_tasks(state,created_at);
+CREATE TABLE reports (
+    id UUID PRIMARY KEY,
+    task_id UUID NOT NULL UNIQUE REFERENCES agent_tasks(id) ON DELETE CASCADE,
+    owner_id BIGINT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    job_id BIGINT NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+    job_version INTEGER NOT NULL,
+    body JSONB NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'DRAFT' CHECK (status IN ('DRAFT','APPROVED','STALE')),
+    approved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE report_resumes (
+    report_id UUID NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+    resume_id BIGINT NOT NULL REFERENCES resumes(id) ON DELETE CASCADE,
+    resume_version INTEGER NOT NULL,
+    PRIMARY KEY(report_id,resume_id)
+);

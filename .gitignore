@@ -1,0 +1,17 @@
+.venv/
+**/__pycache__/
+*.py[cod]
+**/node_modules/
+**/dist/
+**/.env
+**/.env.local
+**/db.sqlite3
+mysite/files/*
+mysite/files_json/*
+**/playwright-report/
+**/test-results/
+**/target/
+java-backend/data/
+java-backend/.env.real
+java-backend/logs/
+java-backend/backups/

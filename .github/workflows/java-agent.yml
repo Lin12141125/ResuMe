@@ -1,0 +1,61 @@
+name: Java Agent Verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      real_ai:
+        description: Run paid real-model synthetic tests
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: iras_ci
+          POSTGRES_USER: iras_ci
+          POSTGRES_PASSWORD: disposable-ci-test-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U iras_ci -d iras_ci"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      DATABASE_URL: jdbc:postgresql://127.0.0.1:5432/iras_ci
+      DATABASE_USER: iras_ci
+      DATABASE_PASSWORD: disposable-ci-test-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            vue-ending-project/package-lock.json
+            vue-admin/package-lock.json
+      - run: mvn -B -ntp -f java-backend/pom.xml test
+      - run: node --test java-backend/tools/legacy-audit.test.mjs
+      - run: npm --prefix vue-ending-project ci
+      - run: npm --prefix vue-ending-project run build
+      - run: npm --prefix vue-admin ci
+      - run: npm --prefix vue-admin run build
+      - name: Real AI acceptance (explicit opt-in)
+        if: github.event_name == 'workflow_dispatch' && inputs.real_ai
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          EMBEDDING_API_KEY: ${{ secrets.EMBEDDING_API_KEY }}
+          EMBEDDING_BASE_URL: ${{ secrets.EMBEDDING_BASE_URL }}
+          EMBEDDING_MODEL: ${{ secrets.EMBEDDING_MODEL }}
+        run: mvn -B -ntp -f java-backend/pom.xml -Diras.test.ai=true test
